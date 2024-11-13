@@ -1,158 +1,118 @@
-
-import java.lang.*;
 public class Main {
     public static void main(String[] args) {
+        Figure circle1 = new Circle(6, "Green", "Black");
+        Figure rectangle1 = new Rectangle(2, 4, "Blue", "Purple");
+        Figure triangle1 = new Triangle(5, 6, 2, "Whire",
+                "Ultramarine");
 
-        FoodBowl foodBowl = new FoodBowl(1);
+        circle1.printFigureInfo();
+        System.out.println();
 
+        rectangle1.printFigureInfo();
+        System.out.println();
 
-        Cat[] cats = { new Cat(), new Cat(), new Cat() };
-
-
-        for (Cat cat : cats) {
-            cat.eat(foodBowl);
-        }
-
-
-        for (int i = 0; i < cats.length; i++) {
-            System.out.println("Кошка " + (i + 1) + " сытость: " + (cats[i].satiety() ? "Да" : "Нет"));
-        }
-
-
-        foodBowl.addFood(1);
-
-
-        for (Cat cat : cats) {
-            cat.eat(foodBowl);
-        }
-
-
-        for (int i = 0; i < cats.length; i++) {
-            System.out.println("Кошка " + (i + 1) + " сытость: " + (cats[i].satiety() ? "Да" : "Нет"));
-        }
-
-        Dog dog1 = new Dog();
-        Dog dog2 = new Dog();
-        Dog dog3 = new Dog();
-        Dog dog4 = new Dog();
-        Cat cat1 = new Cat();
-        Cat cat2 = new Cat();
-
-
-
-
-        dog1.run(300);
-        dog2.swim(5);
-        dog4.run(501);
-        dog4.swim(11);
-        cat2.swim(11);
-        cat1.run(200);
-        cat1.run(201);
-
-
-
-        System.out.println("Животных: " + Animal.getAnimalCount());
-        System.out.println("Собак: " + Dog.giveDogCount());
-        System.out.println("Кошек: " + Cat.giveCatCount());
+        triangle1.printFigureInfo();
     }
 }
 
-class Animal {
-    private static int animalCount = 0;
-    public Animal() {
-        animalCount++;
-    }
-    public static int getAnimalCount() {
-        return animalCount;
-    }
-    public void run(int distance) {
+class Rectangle implements Figure {
+    private double height;
+    private double width;
+    private String fillColor;
+    private String borderColor;
 
+    public Rectangle(double height, double width, String fillColor, String borderColor) {
+        this.height = height;
+        this.width = width;
+        this.fillColor = fillColor;
+        this.borderColor = borderColor;
     }
-    public void swim(int distance) {
 
-    }
-}
-class Dog extends Animal {
-    private static int dogCount = 0;
-    public Dog() {
-        super();
-        dogCount++;
-    }
-    public static int giveDogCount() {
-        return dogCount;
-    }
     @Override
-    public void run(int distance) {
-        if (distance <= 500) {
-            System.out.println("Собака пробежит " + distance + " метров.");
-        } else {
-            System.out.println("Собака не сможет пробежать " + distance + " метров.");
-        }
+    public double getArea() {
+        return height * width;
     }
+
     @Override
-    public void swim(int distance) {
-        if (distance <= 10) {
-            System.out.println("Собака проплывет " + distance + " метров.");
-        } else {
-            System.out.println("Собака не сможет проплыть " + distance + " метров.");
-        }
+    public double getPerimeter() {
+        return 2 * (height + width);
+    }
+
+    @Override
+    public String getBorderColor() {
+        return borderColor;
+    }
+
+    @Override
+    public String getFillColor() {
+        return fillColor;
     }
 }
-class Cat extends Animal {
-    private static int catCount = 0;
-    private boolean isFull;
-    public Cat() {
-        super();
-        this.isFull = false;
-        catCount++;
+class Triangle implements Figure {
+    private double a;
+    private double b;
+    private double c;
+    private String fillColor;
+    private String borderColor;
+
+    public Triangle(double a, double b, double c, String fillColor, String borderColor) {
+        this.a = a;
+        this.b = b;
+        this.c = c;
+        this.fillColor = fillColor;
+        this.borderColor = borderColor;
     }
-    public static int giveCatCount() {
-        return catCount;
-    }
+
     @Override
-    public void run(int distance) {
-        if (distance <= 200) {
-            System.out.println("Кошка пробежит " + distance + " метров.");
-        } else {
-            System.out.println("Кошка не сможет пробежать " + distance + " метров.");
-        }
+    public double getPerimeter() {
+        return a + b + c;
     }
+
     @Override
-    public void swim(int distance) {
-        System.out.println("Кошка не умеет плавать.");
+    public double getArea() {
+        double perimeterHalf = getPerimeter() / 2;
+        return Math.sqrt(perimeterHalf * (perimeterHalf - a) * (perimeterHalf - b) * (perimeterHalf - c));
     }
-    public void eat(FoodBowl foodBowl) {
-        if (foodBowl.getFoodAmount() > 0) {
-            foodBowl.decreaseFood();
-            this.isFull = true;
-            System.out.println("Кошка поела.");
-        } else {
-            System.out.println("Кошка не может поесть,миска пустая.");
-        }
+
+    @Override
+    public String getBorderColor() {
+        return borderColor;
     }
-    public boolean satiety() {
-        return isFull;
+
+    @Override
+    public String getFillColor() {
+        return fillColor;
     }
 }
-class FoodBowl {
-    private int foodAmount;
-    public FoodBowl(int foodAmount) {
-        this.foodAmount = foodAmount;
+class Circle implements Figure {
+    private double radius;
+    private String fillColor;
+    private String borderColor;
+
+    public Circle(double radius, String fillColor, String borderColor) {
+        this.radius = radius;
+        this.fillColor = fillColor;
+        this.borderColor = borderColor;
     }
-    public int getFoodAmount() {
-        return foodAmount;
+
+    @Override
+    public double getArea() {
+        return Math.PI * radius * radius;
     }
-    public void decreaseFood() {
-        if (foodAmount > 0) {
-            foodAmount--;
-        }
+
+    @Override
+    public double getPerimeter() {
+        return 2 * Math.PI * radius;
     }
-    public void addFood(int amount) {
-        if (amount > 0) {
-            foodAmount += amount;
-            System.out.println("Добавили " + amount + " еды в миску. Теперь в миске " + foodAmount + " еды.");
-        } else {
-            System.out.println("Ошибка, количество должно быть > 0.");
-        }
+
+    @Override
+    public String getBorderColor() {
+        return borderColor;
+    }
+
+    @Override
+    public String getFillColor() {
+        return fillColor;
     }
 }
+
